@@ -22,14 +22,29 @@ def processImage(filename, operation):
     match operation:
         case "cgray":
             imgProcessed = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-            cv2.imwrite(f"static/{filename}", imgProcessed)
+            newFilename = f"static/{filename}"
+            cv2.imwrite(newFilename, imgProcessed)
+            return newFilename
+        
+        case "cwebp":
+            newFilename = f"static/{filename.split('.')[0]}.webp"
+            cv2.imwrite(newFilename, img)
+            return newFilename
+        
+        case "cjpg":
+            newFilename = f"static/{filename.split('.')[0]}.jpg"
+            cv2.imwrite(newFilename, img)
+            return newFilename
+        
+        case "cpng":
+            newFilename = f"static/{filename.split('.')[0]}.png"
+            cv2.imwrite(newFilename, img)     
+            return newFilename       
     pass
 
-    match operation:
-        case "cbg":
-           imgProcessed = cv2.bitwise_and(img, img, mask=cv2.bitwise_not(cv2.threshold(cv2.cvtColor(img, cv2.COLOR_BGR2GRAY), 240, 255, cv2.THRESH_BINARY)[0]))
-           cv2.imwrite(f"static/{filename}", imgProcessed)
-    pass
+
+
+
 
 
 @app.route("/")
@@ -54,8 +69,8 @@ def edit():
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             #Process image
-            processImage(filename, operation)
-            flash(f"Your image has been processed and is aVailable <a href='/static/{filename}'>here</a>")
+            new=  processImage(filename, operation)
+            flash(f"Your image has been processed and is aVailable <a href='/{new}' target='_blank'>here</a>")
             return render_template("index.html")
     return render_template("index.html")
 

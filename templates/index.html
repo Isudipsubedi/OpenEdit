@@ -1,6 +1,53 @@
+
 {% extends 'base.html' %}
+
 {% block content %}
+<div class="container"></div>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+   
+    {% for category, message in messages %}
+
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Success!</strong>{{ message | safe }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {% endfor %}
+
+  {% endif %}
+{% endwith %}
 
 
+
+
+
+
+
+   <h1 class="fs-2 text">OpenEdit - Edit your image online!</h1>
+
+   <form action="/edit" method="post" enctype="multipart/form-data">
+
+    <div class="mb-3">
+        <label for="formFile" class="form-label">Insert the image you wish to edit</label>
+        <input class="form-control" type="file" name="file" id="formFile">
+      </div>
+
+      <div class="mb-3">
+      <div class="form-floating">
+        <select name ="operation" class="form-select" id="floatingSelect" aria-label="Floating label select example">
+          <option selected>Select an Operation</option>
+          <option value="cgray">Grayscale Conversion</option>
+          <option value="cbg">Remove Background</option>
+          <option value="cpng">Convert to Png</option>
+          <option value="cwebp">Convert to Webp</option>
+          <option value="cjpg">Convert to Jpg</option>
+          
+        </select>
+        <label for="floatingSelect">Select an editing operation</label>
+      </div> 
+    </div>
+      <button type="submit" class="btn btn-success">Submit</button>
+
+   </form>
 
 {% endblock%}

@@ -4,12 +4,40 @@ from werkzeug.utils import secure_filename
 import cv2
 import os
 
+#sqlalchemy database connection
+from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
+
+
+
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'webp', 'gif'}
 
-
+#create a flask instance
 app = Flask(__name__)
+
+#add database
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+#secret key
 app.secret_key = 'super secret key'
+
+#initialize database
+db = SQLAlchemy(app)
+
+#Create Model
+class Users(db.Model):
+    id=db.Column(db.Integer, primary_key=True)
+    name=db.Column(db.String(100), nullable=False)
+    email=db.Column(db.String(120), nullable=False, unique=True)
+    date_added=db.Column(db.DateTime, default=datetime.utcnow)
+
+    #create string
+    def __repr__(self):
+        return '<Name %r>' % self.name
+
+
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def allowed_file(filename):

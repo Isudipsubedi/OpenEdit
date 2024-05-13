@@ -57,6 +57,47 @@ def processImage(filename, operation):
             newFilename = f"static/{filename}"
             cv2.imwrite(newFilename, cropped_image)
             return newFilename    
+        
+        case "cresize1":
+            imgResized = cv2.resize(img, (350, 350))
+            newFilename = f"static/{filename}"
+            cv2.imwrite(newFilename, imgResized)
+            return newFilename
+        case "cresize2":
+            imgResized = cv2.resize(img, (1000, 1000))
+            newFilename = f"static/{filename}"
+            cv2.imwrite(newFilename, imgResized)
+            return newFilename
+        case "crotate1":
+            imgRotated1 = cv2.flip(img, 0)
+            newFilename = f"static/{filename}"
+            cv2.imwrite(newFilename, imgRotated1)
+            return newFilename
+        case "crotate2":
+            imgRotated2 = cv2.flip(img, 1)
+            newFilename = f"static/{filename}"
+            cv2.imwrite(newFilename, imgRotated2)
+            return newFilename
+        case "cgblur":
+            gaussian = cv2.GaussianBlur(img, (7, 7), 0)
+            newFilename = f"static/{filename}"
+            cv2.imwrite(newFilename, gaussian)
+            return newFilename
+        case "cmblur":
+            median = cv2.medianBlur(img, 5)
+            newFilename = f"static/{filename}"
+            cv2.imwrite(newFilename, median)
+            return newFilename
+        case "cbfilter":
+            bilateral = cv2.bilateralFilter(img, 9, 75, 75)
+            newFilename = f"static/{filename}"
+            cv2.imwrite(newFilename, bilateral)
+            return newFilename
+        case "cborder":
+            border = cv2.copyMakeBorder(img, 10, 10, 10, 10, cv2.BORDER_CONSTANT, None, value = 0)
+            newFilename = f"static/{filename}"
+            cv2.imwrite(newFilename, border)
+            return newFilename
     pass
 
 

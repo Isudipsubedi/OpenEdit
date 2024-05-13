@@ -4,10 +4,6 @@ from werkzeug.utils import secure_filename
 import cv2
 import os
 
-#sqlalchemy database connection
-from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
-
 
 
 UPLOAD_FOLDER = 'uploads'
@@ -22,20 +18,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 #secret key
 app.secret_key = 'super secret key'
-
-#initialize database
-db = SQLAlchemy(app)
-
-#Create Model
-class Users(db.Model):
-    id=db.Column(db.Integer, primary_key=True)
-    name=db.Column(db.String(100), nullable=False)
-    email=db.Column(db.String(120), nullable=False, unique=True)
-    date_added=db.Column(db.DateTime, default=datetime.utcnow)
-
-    #create string
-    def __repr__(self):
-        return '<Name %r>' % self.name
 
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -67,7 +49,14 @@ def processImage(filename, operation):
         case "cpng":
             newFilename = f"static/{filename.split('.')[0]}.png"
             cv2.imwrite(newFilename, img)     
-            return newFilename       
+            return newFilename   
+
+        case "ccrop":
+            height, width = img.shape[:2]
+            cropped_image = img[(int)(height/2)-150:(int)(height/2)+150, (int)(width/2)-150:(int)(width/2)+150]
+            newFilename = f"static/{filename}"
+            cv2.imwrite(newFilename, cropped_image)
+            return newFilename    
     pass
 
 

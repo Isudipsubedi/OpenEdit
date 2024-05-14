@@ -12,9 +12,7 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'webp', 'gif'}
 #create a flask instance
 app = Flask(__name__)
 
-#add database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 
 #secret key
 app.secret_key = 'super secret key'
@@ -26,10 +24,12 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+
 def processImage(filename, operation):
     print(f"the operation is {operation} and filename is {filename}")
     img = cv2.imread(f"uploads/{filename}")
     match operation:
+        
         case "cgray":
             imgProcessed = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             newFilename = f"static/{filename}"
@@ -136,9 +136,9 @@ def edit():
 def about():
     return render_template("about.html")
 
-@app.route("/contact")
+@app.route("/terms")
 def contact():
-    return render_template("contact.html")
+    return render_template("terms.html")
 
 @app.route("/how")
 def how():
